@@ -1,0 +1,798 @@
+---
+const iconPaths = {
+  package: '<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><polyline points="3.29 7 12 12 20.71 7"/><path d="m7.5 4.27 9 5.15"/>',
+  waypoints: '<circle cx="12" cy="4.5" r="2.5"/><path d="m10.2 6.3-3.9 3.9"/><circle cx="4.5" cy="12" r="2.5"/><path d="M7 12h10"/><circle cx="19.5" cy="12" r="2.5"/><path d="m13.8 17.7 3.9-3.9"/><circle cx="12" cy="19.5" r="2.5"/>',
+  split: '<path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3"/><path d="m15 9 6-6"/>',
+  globe: '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
+  terminal: '<path d="m7 11 2-2-2-2"/><path d="M11 13h4"/><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>',
+  link: '<path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/>',
+  dashboard: '<rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>',
+  adblock: '<path d="M11.636 6A13 13 0 0 0 19.4 3.2 1 1 0 0 1 21 4v11.344"/><path d="m2 2 20 20"/><path d="M6 14a12 12 0 0 0 2.4 7.2 2 2 0 0 0 3.2-2.4A8 8 0 0 1 10 14"/><path d="M8 8v6"/>',
+  copy: '<rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  github: '<path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/>',
+  star: '<path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/>',
+  chevron: '<path d="m6 9 6 6 6-6"/>',
+  external: '<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>',
+};
+
+const icon = (name, size = 18) =>
+  `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${iconPaths[name]}</svg>`;
+
+const features = [
+  { icon: 'package', title: '单文件交付', desc: '内核、规则集、面板全部内嵌进一个可执行文件,下载即用;运行时文件在 /tmp,重启不留残渣。' },
+  { icon: 'waypoints', title: 'TUN 透明代理', desc: 'auto_route + auto_redirect 接管整机流量,不碰 iptables,不动防火墙。' },
+  { icon: 'split', title: '规则分流 ⇄ 全局', desc: '国内直连 / 国外代理一键切换;自定义规则优先于内置分流,全局模式下依然生效。' },
+  { icon: 'globe', title: 'DNS 双轨', desc: '国外域名经代理走 Cloudflare DoH,国内直连 223.5.5.5;8 小时乐观缓存,先应答后刷新。' },
+  { icon: 'terminal', title: '进程级分流', desc: '按进程名/路径指定出口节点:qbittorrent 直连、AI 工具走专线,面板点选即成。' },
+  { icon: 'link', title: '节点全来法', desc: 'Clash YAML 订阅、8 种协议分享链接批量导入、VPS 一键部署 Hysteria2。' },
+  { icon: 'dashboard', title: '面板全管理', desc: '启停、延迟测试、连接统计、订阅刷新、版本自升级,全部在浏览器里完成。' },
+  { icon: 'adblock', title: '去广告', desc: '内嵌广告规则集,连接层拦截,一键开关;自定义放行规则可对误拦域名生效。' },
+];
+
+const rulesExample = `custom_rules:
+  - '{"process_name":"qbittorrent","action":"route","outbound":"direct"}'
+  - '{"process_name":"codex","action":"route","outbound":"香港节点"}'`;
+
+const faqs = [
+  { q: '为什么需要 root?', a: 'TUN 透明代理需要创建虚拟网卡并接管整机流量,这是内核级权限。除此之外没有别的依赖——一个文件,sudo 运行即可。' },
+  { q: '支持 OpenWrt 吗?', a: '支持。启动时自动检测并安装依赖;运行时文件全部放在 /tmp,不写路由器 flash,不留残渣。' },
+  { q: '配置存在哪里?', a: '不创建任何文件也能用。需要持久化时按此顺序查找:--config 指定路径 → 可执行文件同目录 config.yaml → /etc/miao/config.yaml。面板里的分流/全局模式是会话级状态,重启后总是回到规则分流。' },
+  { q: '怎么卸载干净?', a: 'sudo bash remove.sh 会停止并删除 systemd 服务、二进制、/etc/miao 配置目录与 /tmp 运行时文件,并清理残留的 sing-box 进程与 sing-tun 网卡。' },
+  { q: '面板有鉴权吗?', a: '没有。面板监听 0.0.0.0:6161,面向可信局域网设计——请勿暴露到公网,或在前面套一层带鉴权的反向代理。' },
+  { q: '节点从哪里导入?', a: '三种来法:Clash YAML 订阅;粘贴分享链接(hysteria2/hy2/ss/vmess/vless/trojan/tuic/anytls)批量导入;「VPS 部署」填入 IP 和 root 密码,自动在远端部署 Hysteria2 并写回本地,密码不保存。' },
+];
+---
+
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Miao — 开箱即用的透明代理</title>
+    <meta name="description" content="Miao 把 sing-box 内核、分流规则与 Web 面板打包成单个可执行文件。下载、sudo 运行、浏览器自动打开,结束。支持 Linux 与 OpenWrt。" />
+    <meta property="og:title" content="Miao — 开箱即用的透明代理" />
+    <meta property="og:description" content="内嵌 sing-box 内核、分流规则与 Web 面板的单文件透明代理。Linux · OpenWrt。" />
+    <meta property="og:image" content="/assets/screenshot.png" />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/assets/icon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="nav-inner">
+        <a class="nav-brand" href="#top">
+          <img src="/assets/icon.svg" alt="Miao logo" width="24" height="24" />
+          <span>Miao</span>
+        </a>
+        <div class="nav-links">
+          <a href="#features">功能</a>
+          <a href="#quickstart">快速上手</a>
+          <a href="#spotlight">进程级分流</a>
+          <a href="#how">原理</a>
+          <a href="#download">下载</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <a class="nav-github" href="https://github.com/YUxiangLuo/miao" target="_blank" rel="noopener">
+          <span set:html={icon('github', 18)} />
+          <span class="nav-github-text">GitHub</span>
+        </a>
+      </div>
+    </nav>
+
+    <header class="hero" id="top">
+      <div class="hero-text">
+        <div class="hero-badges">
+          <span class="badge">Linux · OpenWrt</span>
+          <span class="badge badge-accent">单文件 · 开箱即用</span>
+        </div>
+        <h1>开箱即用的<em>透明代理</em>。</h1>
+        <p class="hero-sub">
+          在 Linux 或路由器上搭分流代理,通常意味着装内核、写配置、调防火墙、再找个面板。
+          Miao 把这一切打包成单个可执行文件——内嵌 sing-box 内核、分流规则与 Web 面板。
+          下载、<code>sudo</code> 运行、浏览器自动打开,结束。
+        </p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="#quickstart">30 秒上手</a>
+          <a class="btn btn-ghost" href="https://github.com/YUxiangLuo/miao" target="_blank" rel="noopener">
+            <span set:html={icon('github', 16)} /> GitHub
+          </a>
+          <a class="btn btn-ghost" href="https://github.com/YUxiangLuo/miao/releases/latest" target="_blank" rel="noopener">
+            <span set:html={icon('external', 14)} /> Releases
+          </a>
+        </div>
+      </div>
+      <div class="hero-shot">
+        <img src="/assets/screenshot.png" alt="Miao 控制面板:节点选择、手动节点、订阅管理、自定义规则与活跃链接" loading="eager" />
+      </div>
+    </header>
+
+    <main>
+      <section class="section" id="quickstart">
+        <h2 class="section-title">30 秒上手</h2>
+        <p class="section-sub">三条命令。找不到配置时会先进入引导页,不落盘任何文件。</p>
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="term-dot" /><span class="term-dot" /><span class="term-dot" />
+            <div class="arch-tabs" role="tablist" aria-label="选择架构">
+              <button class="arch-tab active" data-arch="amd64" role="tab" aria-selected="true">amd64</button>
+              <button class="arch-tab" data-arch="arm64" role="tab" aria-selected="false">arm64</button>
+            </div>
+            <button class="copy-btn" id="copy-install" aria-label="复制安装命令">
+              <span class="copy-icon" set:html={icon('copy', 14)} />
+              <span class="copy-text">复制</span>
+            </button>
+          </div>
+          <pre id="install-code"><code>mkdir -p ~/miao && cd ~/miao
+wget https://github.com/YUxiangLuo/miao/releases/latest/download/<span id="asset-name">miao-rust-linux-amd64</span> -O miao
+chmod +x miao && sudo ./miao</code></pre>
+        </div>
+        <ul class="notes">
+          <li>浏览器打开 <code>http://localhost:6161</code>,按引导页添加订阅或节点即可</li>
+          <li>需要 root(TUN 透明代理所需)</li>
+          <li>常驻服务:<code>sudo bash install.sh ./miao</code> 安装为开机自启的 systemd 服务,重复运行即升级;卸载 <code>sudo bash remove.sh</code> 清理全部痕迹</li>
+        </ul>
+      </section>
+
+      <section class="section" id="why">
+        <h2 class="section-title">为什么是 Miao</h2>
+        <div class="compare">
+          <div class="compare-card compare-old">
+            <h3>传统方式</h3>
+            <ol>
+              <li>装 sing-box 内核</li>
+              <li>手写 JSON 配置</li>
+              <li>调防火墙 / iptables</li>
+              <li>再找面板拼装</li>
+              <li>出问题翻日志</li>
+            </ol>
+          </div>
+          <div class="compare-card compare-new">
+            <h3>Miao</h3>
+            <ol>
+              <li>下载一个文件</li>
+              <li><code>sudo</code> 运行</li>
+              <li>浏览器自动打开引导页</li>
+            </ol>
+          </div>
+        </div>
+        <p class="compare-foot">不创建任何文件也能跑起来;需要精细控制时,配置参考在等你。</p>
+      </section>
+
+      <section class="section" id="features">
+        <h2 class="section-title">面板里有什么</h2>
+        <p class="section-sub">从启停服务到进程级分流,全部在浏览器里完成。</p>
+        <div class="feature-grid">
+          {features.map((f) => (
+            <div class="feature-card">
+              <span class="feature-icon" set:html={icon(f.icon, 20)} />
+              <h3>{f.title}</h3>
+              <p>{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="section spotlight" id="spotlight">
+        <div class="spotlight-text">
+          <h2 class="section-title">对某个进程,指定出口节点</h2>
+          <p>
+            让 <code>qbittorrent</code> 永远直连、不耗机场流量;让 <code>codex</code> 固定走低延迟节点;
+            浏览器照旧规则分流。进程名或路径匹配,面板里下拉即选。
+          </p>
+          <p>
+            节点日后消失(订阅刷新改名)也不慌:规则自动跳过、面板标记提醒,节点恢复后自动生效。
+          </p>
+        </div>
+        <div class="terminal terminal-small">
+          <div class="terminal-bar">
+            <span class="term-dot" /><span class="term-dot" /><span class="term-dot" />
+            <span class="terminal-title">config.yaml</span>
+          </div>
+          <pre><code>{rulesExample}</code></pre>
+        </div>
+      </section>
+
+      <section class="section" id="how">
+        <h2 class="section-title">它是怎么工作的</h2>
+        <div class="diagram-wrap">
+          <pre class="diagram"><code>┌─────────────┐   TUN    ┌──────────────────┐   Clash API   ┌─────────┐
+│ 本机全部流量 │ ───────▶ │ 内嵌 sing-box 内核 │ ◀──────────▶ │ Web 面板 │
+└─────────────┘          │ geoip-cn 规则集    │  127.0.0.1   │ (内嵌)   │
+                         │ 决定分流去向       │              └─────────┘
+                         └──────────────────┘</code></pre>
+        </div>
+        <div class="how-points">
+          <div class="how-point"><strong>TUN 透明代理</strong>接管整机流量,不碰 iptables</div>
+          <div class="how-point"><strong>DNS 双轨</strong>:国外 Cloudflare DoH,国内 223.5.5.5,乐观缓存</div>
+          <div class="how-point">配置变更先 <code>sing-box check</code> 校验再热重启,失败自动回滚</div>
+        </div>
+      </section>
+
+      <section class="section" id="download">
+        <h2 class="section-title">平台与下载</h2>
+        <div class="download-table-wrap">
+          <table class="download-table">
+            <thead>
+              <tr><th>平台</th><th>文件</th><th>备注</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Linux amd64</td>
+                <td><a href="https://github.com/YUxiangLuo/miao/releases/latest/download/miao-rust-linux-amd64">miao-rust-linux-amd64</a></td>
+                <td>桌面 / 服务器</td>
+              </tr>
+              <tr>
+                <td>Linux arm64</td>
+                <td><a href="https://github.com/YUxiangLuo/miao/releases/latest/download/miao-rust-linux-arm64">miao-rust-linux-arm64</a></td>
+                <td>树莓派 / ARM 盒子</td>
+              </tr>
+              <tr>
+                <td>OpenWrt</td>
+                <td>按架构同上</td>
+                <td>自动安装依赖;不写 flash</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="section-sub">
+          <a href="https://github.com/YUxiangLuo/miao/releases" target="_blank" rel="noopener">全部版本与更新日志 →</a>
+        </p>
+      </section>
+
+      <section class="section" id="faq">
+        <h2 class="section-title">常见问题</h2>
+        <div class="faq-list">
+          {faqs.map((f) => (
+            <details class="faq-item">
+              <summary>
+                <span>{f.q}</span>
+                <span class="faq-chevron" set:html={icon('chevron', 16)} />
+              </summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <section class="cta-band">
+        <h2>下载一个文件,30 秒后见。</h2>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="#quickstart">快速上手</a>
+          <a class="btn btn-ghost" href="https://github.com/YUxiangLuo/miao" target="_blank" rel="noopener">
+            <span set:html={icon('star', 15)} /> 在 GitHub 上 Star
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <span class="footer-brand">
+          <img src="/assets/icon.svg" alt="" width="20" height="20" />
+          Miao — 喵一声,全网畅通
+        </span>
+        <div class="footer-links">
+          <a href="https://github.com/YUxiangLuo/miao" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/YUxiangLuo/miao/releases" target="_blank" rel="noopener">Releases</a>
+          <a href="https://github.com/YUxiangLuo/miao/issues" target="_blank" rel="noopener">Issues</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // 架构 tab 切换
+      const assetName = document.getElementById('asset-name');
+      document.querySelectorAll('.arch-tab').forEach((tab) => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.arch-tab').forEach((t) => {
+            t.classList.toggle('active', t === tab);
+            t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+          });
+          assetName.textContent = `miao-rust-linux-${tab.dataset.arch}`;
+        });
+      });
+
+      // 一键复制
+      const copyBtn = document.getElementById('copy-install');
+      copyBtn.addEventListener('click', async () => {
+        const text = document.getElementById('install-code').innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          const range = document.createRange();
+          range.selectNodeContents(document.getElementById('install-code'));
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+          document.execCommand('copy');
+          sel.removeAllRanges();
+        }
+        copyBtn.classList.add('copied');
+        copyBtn.querySelector('.copy-text').textContent = '已复制';
+        setTimeout(() => {
+          copyBtn.classList.remove('copied');
+          copyBtn.querySelector('.copy-text').textContent = '复制';
+        }, 1600);
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #1a1d22;
+    --surface: #22262d;
+    --surface-soft: #1e2229;
+    --surface-blue: #1e2a3a;
+    --surface-blue-strong: #2a3f58;
+    --border: #333a47;
+    --border-soft: #2b3040;
+    --text: #cdd3da;
+    --text-strong: #eef3f8;
+    --text-muted: #7e8b9a;
+    --accent: #617fa6;
+    --accent-strong: #7b9dc4;
+    --success: #4a9e75;
+    --radius: 8px;
+    --shadow: 0 16px 32px rgba(0, 0, 0, 0.25);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  code, pre {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  }
+
+  code {
+    background: var(--surface-soft);
+    border: 1px solid var(--border-soft);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 0.875em;
+    color: var(--accent-strong);
+  }
+
+  pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--text);
+    font-size: inherit;
+  }
+
+  a { color: var(--accent-strong); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ---- 导航 ---- */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(26, 29, 34, 0.82);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .nav-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-strong);
+    font-weight: 650;
+    font-size: 1.0625rem;
+  }
+  .nav-brand:hover { text-decoration: none; }
+  .nav-links {
+    display: flex;
+    gap: 18px;
+    margin-left: auto;
+  }
+  .nav-links a {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+  .nav-links a:hover { color: var(--text-strong); text-decoration: none; }
+  .nav-github {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 5px 12px;
+    font-size: 0.875rem;
+  }
+  .nav-github:hover { border-color: var(--accent); text-decoration: none; }
+
+  /* ---- Hero ---- */
+  .hero {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 72px 24px 56px;
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: 48px;
+    align-items: center;
+  }
+  .hero-badges { display: flex; gap: 8px; margin-bottom: 20px; }
+  .badge {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 3px 10px;
+  }
+  .badge-accent {
+    color: var(--accent-strong);
+    border-color: var(--surface-blue-strong);
+    background: var(--surface-blue);
+  }
+  h1 {
+    color: var(--text-strong);
+    font-size: 2.5rem;
+    line-height: 1.25;
+    margin: 0 0 20px;
+    letter-spacing: 0.01em;
+  }
+  h1 em {
+    font-style: normal;
+    color: var(--accent-strong);
+  }
+  .hero-sub {
+    color: var(--text-muted);
+    margin: 0 0 28px;
+    max-width: 34em;
+  }
+  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border-radius: var(--radius);
+    padding: 10px 20px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .btn:hover { text-decoration: none; }
+  .btn-primary {
+    background: var(--accent-strong);
+    color: #10131a;
+  }
+  .btn-primary:hover { background: #8fb0d6; }
+  .btn-ghost {
+    color: var(--text);
+    border-color: var(--border);
+    background: var(--surface);
+  }
+  .btn-ghost:hover { border-color: var(--accent); }
+  .hero-shot img {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    display: block;
+  }
+
+  /* ---- Section 通用 ---- */
+  main { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  .section { padding: 56px 0 8px; }
+  .section-title {
+    color: var(--text-strong);
+    font-size: 1.625rem;
+    margin: 0 0 8px;
+  }
+  .section-sub { color: var(--text-muted); margin: 0 0 24px; }
+
+  /* ---- 终端代码块 ---- */
+  .terminal {
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .term-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+  .term-dot:nth-child(1) { background: #b0525266; }
+  .term-dot:nth-child(2) { background: #a0784066; }
+  .term-dot:nth-child(3) { background: #4a9e7566; }
+  .terminal-title {
+    margin-left: 8px;
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+  }
+  .arch-tabs {
+    display: flex;
+    gap: 4px;
+    margin-left: 12px;
+  }
+  .arch-tab {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 6px;
+    padding: 3px 12px;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .arch-tab.active {
+    background: var(--surface-blue);
+    border-color: var(--surface-blue-strong);
+    color: var(--accent-strong);
+  }
+  .copy-btn {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .copy-btn:hover { color: var(--text-strong); border-color: var(--accent); }
+  .copy-btn.copied { color: var(--success); border-color: var(--success); }
+  .terminal pre {
+    margin: 0;
+    padding: 18px 20px;
+    overflow-x: auto;
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  #asset-name { color: var(--accent-strong); }
+
+  .notes {
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+    padding-left: 20px;
+  }
+  .notes li { margin: 6px 0; }
+
+  /* ---- 痛点对比 ---- */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .compare-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    background: var(--surface);
+  }
+  .compare-card h3 { margin: 0 0 12px; color: var(--text-strong); }
+  .compare-card ol { margin: 0; padding-left: 22px; color: var(--text-muted); }
+  .compare-card li { margin: 6px 0; }
+  .compare-new {
+    border-color: var(--surface-blue-strong);
+    background: var(--surface-blue);
+  }
+  .compare-new li { color: var(--text); }
+  .compare-foot {
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+    margin-top: 16px;
+  }
+
+  /* ---- 功能网格 ---- */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .feature-icon {
+    display: inline-flex;
+    color: var(--accent-strong);
+    background: var(--surface-blue);
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 12px;
+  }
+  .feature-card h3 {
+    margin: 0 0 6px;
+    color: var(--text-strong);
+    font-size: 1rem;
+  }
+  .feature-card p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  /* ---- Spotlight ---- */
+  .spotlight {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: 40px;
+    align-items: center;
+  }
+  .spotlight-text p { color: var(--text-muted); }
+  .terminal-small pre { font-size: 0.8125rem; }
+
+  /* ---- 原理 ---- */
+  .diagram-wrap {
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+  }
+  .diagram {
+    margin: 0;
+    padding: 22px 24px;
+    overflow-x: auto;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--accent-strong);
+  }
+  .how-points {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 16px;
+  }
+  .how-point {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .how-point strong { color: var(--text-strong); }
+
+  /* ---- 下载表 ---- */
+  .download-table-wrap {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .download-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+  }
+  .download-table th,
+  .download-table td {
+    text-align: left;
+    padding: 12px 18px;
+    font-size: 0.9375rem;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .download-table th {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.8125rem;
+    background: var(--surface-soft);
+  }
+  .download-table tr:last-child td { border-bottom: none; }
+  .download-table td:first-child { color: var(--text-strong); }
+  .download-table td:nth-child(2) { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.875rem; }
+
+  /* ---- FAQ ---- */
+  .faq-list { display: flex; flex-direction: column; gap: 10px; }
+  .faq-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0 18px;
+  }
+  .faq-item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 15px 0;
+    cursor: pointer;
+    color: var(--text-strong);
+    font-weight: 600;
+    list-style: none;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-chevron {
+    color: var(--text-muted);
+    display: inline-flex;
+    transition: transform 0.15s ease;
+  }
+  .faq-item[open] .faq-chevron { transform: rotate(180deg); }
+  .faq-item p {
+    margin: 0;
+    padding: 0 0 16px;
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+  }
+
+  /* ---- CTA 条 / 页脚 ---- */
+  .cta-band {
+    margin: 72px 0 56px;
+    text-align: center;
+    background: var(--surface-blue);
+    border: 1px solid var(--surface-blue-strong);
+    border-radius: 16px;
+    padding: 48px 24px;
+  }
+  .cta-band h2 {
+    color: var(--text-strong);
+    margin: 0 0 20px;
+    font-size: 1.5rem;
+  }
+  .cta-band .hero-ctas { justify-content: center; }
+  .footer {
+    border-top: 1px solid var(--border-soft);
+  }
+  .footer-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+  .footer-brand { display: inline-flex; align-items: center; gap: 8px; }
+  .footer-links { display: flex; gap: 18px; }
+  .footer-links a { color: var(--text-muted); }
+  .footer-links a:hover { color: var(--text-strong); }
+
+  /* ---- 响应式 ---- */
+  @media (max-width: 960px) {
+    .hero { grid-template-columns: 1fr; padding-top: 48px; gap: 32px; }
+    .feature-grid { grid-template-columns: repeat(2, 1fr); }
+    .spotlight { grid-template-columns: 1fr; gap: 24px; }
+    .how-points { grid-template-columns: 1fr; }
+    .compare { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .feature-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 1.875rem; }
+    .section { padding: 40px 0 4px; }
+  }
+</style>
