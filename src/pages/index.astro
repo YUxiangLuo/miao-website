@@ -60,7 +60,7 @@ const faqs = [
     <nav class="nav">
       <div class="nav-inner">
         <a class="nav-brand" href="#top">
-          <img src="/assets/icon.svg" alt="Miao logo" width="24" height="24" />
+          <img src="/assets/icon.svg" alt="Miao logo" width="30" height="30" />
           <span>Miao</span>
         </a>
         <div class="nav-links">
@@ -395,11 +395,14 @@ chmod +x miao && sudo ./miao</code></pre>
   .nav-brand {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 9px;
     color: var(--text-strong);
     font-weight: 650;
-    font-size: 1.0625rem;
+    font-size: 1.25rem;
+    /* 行高收紧,让文字视觉中心与图标对齐(半行距会让无下行字母的文字看起来下沉) */
+    line-height: 1;
   }
+  .nav-brand img { display: block; }
   .nav-brand:hover { text-decoration: none; }
   .nav-links {
     display: flex;
