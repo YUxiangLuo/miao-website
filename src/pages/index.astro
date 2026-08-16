@@ -20,14 +20,14 @@ const icon = (name, size = 18) =>
   `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${iconPaths[name]}</svg>`;
 
 const features = [
-  { icon: 'package', title: '单文件交付', desc: '内核、规则集、面板全部内嵌进一个可执行文件,下载即用;运行时文件在 /tmp,重启不留残渣。' },
-  { icon: 'waypoints', title: 'TUN 透明代理', desc: 'auto_route + auto_redirect 接管整机流量,不碰 iptables,不动防火墙。' },
-  { icon: 'split', title: '规则分流 ⇄ 全局', desc: '国内直连 / 国外代理一键切换;自定义规则优先于内置分流,全局模式下依然生效。' },
-  { icon: 'globe', title: 'DNS 双轨', desc: '国外域名经代理走 Cloudflare DoH,国内直连 223.5.5.5;8 小时乐观缓存,先应答后刷新。' },
-  { icon: 'terminal', title: '进程级分流', desc: '按进程名/路径指定出口节点:qbittorrent 直连、AI 工具走专线,面板点选即成。' },
-  { icon: 'link', title: '节点全来法', desc: 'Clash YAML 订阅、8 种协议分享链接批量导入、VPS 一键部署 Hysteria2。' },
-  { icon: 'dashboard', title: '面板全管理', desc: '启停、延迟测试、连接统计、订阅刷新、版本自升级,全部在浏览器里完成。' },
-  { icon: 'adblock', title: '去广告', desc: '内嵌广告规则集,连接层拦截,一键开关;自定义放行规则可对误拦域名生效。' },
+  { icon: 'package', title: '单文件交付', desc: '内核、规则集、面板全部内嵌进一个可执行文件，下载即用；运行时文件在 /tmp，重启不留残渣。' },
+  { icon: 'waypoints', title: 'TUN 透明代理', desc: 'auto_route + auto_redirect 接管整机流量，不碰 iptables，不动防火墙。' },
+  { icon: 'split', title: '规则分流 ⇄ 全局', desc: '国内直连 / 国外代理一键切换；自定义规则优先于内置分流，全局模式下依然生效。' },
+  { icon: 'globe', title: 'DNS 双轨', desc: '国外域名经代理走 Cloudflare DoH，国内直连 223.5.5.5；8 小时乐观缓存，先应答后刷新。' },
+  { icon: 'terminal', title: '进程级分流', desc: '按进程名/路径指定出口节点：qbittorrent 直连、AI 工具走专线，面板点选即成。' },
+  { icon: 'link', title: '节点全来法', desc: 'Clash YAML 订阅、主流协议分享链接(hy2/ss/vmess/vless/trojan/tuic/anytls)批量导入、VPS 一键部署 Hysteria2。' },
+  { icon: 'dashboard', title: '面板全管理', desc: '启停、延迟测试、连接统计、订阅刷新、版本自升级，全部在浏览器里完成。' },
+  { icon: 'adblock', title: '去广告', desc: '内嵌广告规则集，路由层拦截，一键开关；自定义放行规则可对误拦域名生效。' },
 ];
 
 const rulesExample = `custom_rules:
@@ -35,12 +35,12 @@ const rulesExample = `custom_rules:
   - '{"process_name":"codex","action":"route","outbound":"香港节点"}'`;
 
 const faqs = [
-  { q: '为什么需要 root?', a: 'TUN 透明代理需要创建虚拟网卡并接管整机流量,这是内核级权限。除此之外没有别的依赖——一个文件,sudo 运行即可。' },
-  { q: '支持 OpenWrt 吗?', a: '支持。启动时自动检测并安装依赖;运行时文件全部放在 /tmp,不写路由器 flash。注意仅支持 x86_64 与 aarch64 架构(x86 软路由、ARM64 盒子),mips 机型不在支持范围。' },
-  { q: '配置存在哪里?', a: '不创建任何文件也能用。需要持久化时按此顺序查找:--config 指定路径 → 可执行文件同目录 config.yaml → /etc/miao/config.yaml。面板里的分流/全局模式是会话级状态,重启后总是回到规则分流。' },
-  { q: '怎么卸载干净?', a: 'sudo bash remove.sh 会停止并删除 systemd 服务、二进制、/etc/miao 配置目录与 /tmp 运行时文件,并清理残留的 sing-box 进程与 sing-tun 网卡。' },
-  { q: '面板有鉴权吗?', a: '没有。面板监听 0.0.0.0:6161,面向可信局域网设计——请勿暴露到公网,或在前面套一层带鉴权的反向代理。' },
-  { q: '节点从哪里导入?', a: '三种来法:Clash YAML 订阅;粘贴分享链接(hysteria2/hy2/ss/vmess/vless/trojan/tuic/anytls)批量导入;「VPS 部署」填入 IP 和 root 密码,自动在远端部署 Hysteria2 并写回本地,密码不保存。' },
+  { q: '为什么需要 root?', a: 'TUN 透明代理需要创建虚拟网卡并接管整机流量，这是内核级权限。除此之外没有别的依赖——一个文件，sudo 运行即可。' },
+  { q: '支持 OpenWrt 吗?', a: '支持。启动时自动检测并安装依赖；运行时文件全部放在 /tmp，不写路由器 flash。注意仅支持 x86_64 与 aarch64 架构(x86 软路由、ARM64 盒子)，mips 机型不在支持范围。' },
+  { q: '配置存在哪里?', a: '不创建任何文件也能用。需要持久化时按此顺序查找：--config 指定路径 → 可执行文件同目录 config.yaml → /etc/miao/config.yaml。面板里的分流/全局模式是会话级状态，重启后总是回到规则分流。' },
+  { q: '怎么卸载干净?', a: 'sudo bash remove.sh 会停止并删除 systemd 服务、二进制、/etc/miao 配置目录与 /tmp 运行时文件，并清理残留的 sing-box 进程与 sing-tun 网卡。' },
+  { q: '面板有鉴权吗?', a: '没有。面板监听 0.0.0.0：6161，面向可信局域网设计——请勿暴露到公网，或在前面套一层带鉴权的反向代理。' },
+  { q: '节点从哪里导入?', a: '三种来法：Clash YAML 订阅；粘贴分享链接(hysteria2/hy2/ss/vmess/vless/trojan/tuic/anytls)批量导入；「VPS 部署」填入 IP 和 root 密码，自动在远端部署 Hysteria2 并写回本地，密码不保存。' },
 ];
 ---
 
@@ -49,7 +49,7 @@ const faqs = [
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Miao — 开箱即用的透明代理</title>
-    <meta name="description" content="Miao 把 sing-box 内核、分流规则与 Web 面板打包成单个可执行文件。下载、sudo 运行、浏览器自动打开,结束。支持 Linux 与 OpenWrt。" />
+    <meta name="description" content="Miao 把 sing-box 内核、分流规则与 Web 面板打包成单个可执行文件。下载、sudo 运行、浏览器自动打开，结束。支持 Linux 与 OpenWrt。" />
     <link rel="canonical" href="https://miao.vesein.dev/" />
     <meta property="og:title" content="Miao — 开箱即用的透明代理" />
     <meta property="og:description" content="内嵌 sing-box 内核、分流规则与 Web 面板的单文件透明代理。Linux · OpenWrt。" />
@@ -106,9 +106,9 @@ const faqs = [
         </div>
         <h1>开箱即用的<em>透明代理</em>。</h1>
         <p class="hero-sub">
-          在 Linux 或路由器上搭分流代理,通常意味着装内核、写配置、调防火墙、再找个面板。
+          在 Linux 或路由器上搭分流代理，通常意味着装内核、写配置、调防火墙、再找个面板。
           Miao 把这一切打包成单个可执行文件——内嵌 sing-box 内核、分流规则与 Web 面板。
-          下载、<code>sudo</code> 运行、浏览器自动打开,结束。
+          下载、<code>sudo</code> 运行、浏览器自动打开，结束。
         </p>
         <div class="hero-ctas">
           <a class="btn btn-primary" href="#quickstart">30 秒上手</a>
@@ -121,15 +121,15 @@ const faqs = [
         </div>
       </div>
       <div class="hero-shot">
-        <img src="/assets/screenshot.png" alt="Miao 控制面板:节点选择、手动节点、订阅管理、自定义规则与活跃链接" loading="eager" />
-        <p class="shot-caption">面板实拍,服务器与订阅信息已打码</p>
+        <img src="/assets/screenshot.png" alt="Miao 控制面板：节点选择、手动节点、订阅管理、自定义规则与活跃链接" loading="eager" />
+        <p class="shot-caption">面板实拍，服务器与订阅信息已打码</p>
       </div>
     </header>
 
     <main>
       <section class="section" id="quickstart">
         <h2 class="section-title">30 秒上手</h2>
-        <p class="section-sub">三条命令。找不到配置时会先进入引导页,不落盘任何文件。</p>
+        <p class="section-sub">三条命令。找不到配置时会先进入引导页，不落盘任何文件。</p>
         <div class="terminal">
           <div class="terminal-bar">
             <span class="term-dot" /><span class="term-dot" /><span class="term-dot" />
@@ -147,9 +147,9 @@ wget https://github.com/YUxiangLuo/miao/releases/latest/download/<span id="asset
 chmod +x miao && sudo ./miao</code></pre>
         </div>
         <ul class="notes">
-          <li>浏览器打开 <code>http://localhost:6161</code>,按引导页添加订阅或节点即可</li>
+          <li>浏览器打开 <code>http://localhost:6161</code>，按引导页添加订阅或节点即可</li>
           <li>需要 root(TUN 透明代理所需)</li>
-          <li>常驻服务:<code>sudo bash install.sh ./miao</code> 安装为开机自启的 systemd 服务,重复运行即升级;卸载 <code>sudo bash remove.sh</code> 清理全部痕迹</li>
+          <li>常驻服务：<code>sudo bash install.sh ./miao</code> 安装为开机自启的 systemd 服务，重复运行即升级；卸载 <code>sudo bash remove.sh</code> 清理全部痕迹</li>
         </ul>
       </section>
 
@@ -175,12 +175,12 @@ chmod +x miao && sudo ./miao</code></pre>
             </ol>
           </div>
         </div>
-        <p class="compare-foot">不创建任何文件也能跑起来;需要精细控制时,配置参考在等你。</p>
+        <p class="compare-foot">不创建任何文件也能跑起来；需要精细控制时，<a href="https://github.com/YUxiangLuo/miao#%E9%85%8D%E7%BD%AE%E5%8F%82%E8%80%83%E8%BF%9B%E9%98%B6" target="_blank" rel="noopener">配置参考</a>在等你。</p>
       </section>
 
       <section class="section" id="features">
-        <h2 class="section-title">面板里有什么</h2>
-        <p class="section-sub">从启停服务到进程级分流,全部在浏览器里完成。</p>
+        <h2 class="section-title">功能一览</h2>
+        <p class="section-sub">从内核到面板，一个文件全包。</p>
         <div class="feature-grid">
           {features.map((f) => (
             <div class="feature-card">
@@ -194,13 +194,13 @@ chmod +x miao && sudo ./miao</code></pre>
 
       <section class="section spotlight" id="spotlight">
         <div class="spotlight-text">
-          <h2 class="section-title">对某个进程,指定出口节点</h2>
+          <h2 class="section-title">对某个进程，指定出口节点</h2>
           <p>
-            让 <code>qbittorrent</code> 永远直连、不耗机场流量;让 <code>codex</code> 固定走低延迟节点;
-            浏览器照旧规则分流。进程名或路径匹配,面板里下拉即选。
+            让 <code>qbittorrent</code> 永远直连、不耗机场流量；让 <code>codex</code> 固定走低延迟节点；
+            浏览器照旧规则分流。进程名或路径匹配，面板里下拉即选。
           </p>
           <p>
-            节点日后消失(订阅刷新改名)也不慌:规则自动跳过、面板标记提醒,节点恢复后自动生效。
+            节点日后消失(订阅刷新改名)也不慌：规则自动跳过、面板标记提醒，节点恢复后自动生效。
           </p>
         </div>
         <div class="terminal terminal-small">
@@ -222,9 +222,9 @@ chmod +x miao && sudo ./miao</code></pre>
                          └──────────────────┘</code></pre>
         </div>
         <div class="how-points">
-          <div class="how-point"><strong>TUN 透明代理</strong>接管整机流量,不碰 iptables</div>
-          <div class="how-point"><strong>DNS 双轨</strong>:国外 Cloudflare DoH,国内 223.5.5.5,乐观缓存</div>
-          <div class="how-point">配置变更先 <code>sing-box check</code> 校验再热重启,失败自动回滚</div>
+          <div class="how-point"><strong>TUN 透明代理</strong>接管整机流量，不碰 iptables</div>
+          <div class="how-point"><strong>DNS 双轨</strong>：国外 Cloudflare DoH，国内 223.5.5.5，乐观缓存</div>
+          <div class="how-point">配置变更先 <code>sing-box check</code> 校验再热重启，失败自动回滚</div>
         </div>
       </section>
 
@@ -249,7 +249,7 @@ chmod +x miao && sudo ./miao</code></pre>
               <tr>
                 <td>OpenWrt</td>
                 <td>按架构同上</td>
-                <td>仅 x86_64 / aarch64(软路由、ARM 盒子);自动安装依赖,不写 flash</td>
+                <td>仅 x86_64 / aarch64(软路由、ARM 盒子)；自动安装依赖，不写 flash</td>
               </tr>
             </tbody>
           </table>
@@ -275,7 +275,7 @@ chmod +x miao && sudo ./miao</code></pre>
       </section>
 
       <section class="cta-band">
-        <h2>下载一个文件,30 秒后见。</h2>
+        <h2>下载一个文件，30 秒后见。</h2>
         <div class="hero-ctas">
           <a class="btn btn-primary" href="#quickstart">快速上手</a>
           <a class="btn btn-ghost" href="https://github.com/YUxiangLuo/miao" target="_blank" rel="noopener">
@@ -289,7 +289,7 @@ chmod +x miao && sudo ./miao</code></pre>
       <div class="footer-inner">
         <span class="footer-brand">
           <img src="/assets/icon.svg" alt="" width="20" height="20" />
-          Miao — 喵一声,全网畅通
+          Miao — 喵一声，全网畅通
         </span>
         <div class="footer-links">
           <a href="https://github.com/YUxiangLuo/miao" target="_blank" rel="noopener">GitHub</a>
