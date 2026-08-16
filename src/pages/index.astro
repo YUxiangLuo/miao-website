@@ -121,8 +121,8 @@ const faqs = [
         </div>
       </div>
       <div class="hero-shot">
-        <img src="/assets/screenshot.png" alt="Miao 控制面板：节点选择、手动节点、订阅管理、自定义规则与活跃链接" loading="eager" />
-        <p class="shot-caption">面板实拍，服务器与订阅信息已打码</p>
+        <img src="/assets/screenshot.webp" alt="Miao 控制面板:节点选择、手动节点、订阅管理、自定义规则与活跃链接" loading="eager" />
+        <p class="shot-caption">面板实拍,服务器与订阅信息已打码</p>
       </div>
     </header>
 
@@ -452,13 +452,14 @@ chmod +x miao && sudo ./miao</code></pre>
   .hero {
     max-width: 1120px;
     margin: 0 auto;
-    padding: 72px 24px 56px;
-    display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-    gap: 48px;
-    align-items: center;
+    padding: 64px 24px 56px;
+    text-align: center;
   }
-  .hero-badges { display: flex; gap: 8px; margin-bottom: 20px; align-items: center; flex-wrap: wrap; }
+  .hero-text {
+    max-width: 720px;
+    margin: 0 auto 40px;
+  }
+  .hero-badges { display: flex; gap: 8px; margin-bottom: 20px; align-items: center; flex-wrap: wrap; justify-content: center; }
   .hero-badges .shield { height: 20px; display: block; }
   .badge {
     font-size: 0.75rem;
@@ -485,10 +486,10 @@ chmod +x miao && sudo ./miao</code></pre>
   }
   .hero-sub {
     color: var(--text-muted);
-    margin: 0 0 28px;
+    margin: 0 auto 28px;
     max-width: 34em;
   }
-  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: center; }
   .btn {
     display: inline-flex;
     align-items: center;
@@ -815,7 +816,7 @@ chmod +x miao && sudo ./miao</code></pre>
 
   /* ---- 响应式 ---- */
   @media (max-width: 960px) {
-    .hero { grid-template-columns: 1fr; padding-top: 48px; gap: 32px; }
+    .hero { padding-top: 48px; }
     .feature-grid { grid-template-columns: repeat(2, 1fr); }
     .spotlight { grid-template-columns: 1fr; gap: 24px; }
     .how-points { grid-template-columns: 1fr; }

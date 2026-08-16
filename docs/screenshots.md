@@ -72,7 +72,9 @@ sleep 5                                                     # 等节点/规则/�
 
 ```bash
 agent-browser screenshot /tmp/miao-panel.png
-cp /tmp/miao-panel.png public/assets/screenshot.png
+# 官网使用 WebP(体积约为 PNG 的 1/3):
+magick /tmp/miao-panel.png -quality 85 public/assets/screenshot.webp
+# 主仓库 README 继续用 PNG(GitHub 兼容性最稳):cp 到 miao/docs/screenshot.png
 ```
 
 ## 注意事项（都踩过）
@@ -85,5 +87,6 @@ cp /tmp/miao-panel.png public/assets/screenshot.png
 
 ## 当前官网截图的存档
 
-- 官网使用：`public/assets/screenshot.png`(1440×1400，已打码）
-- 主仓库使用：`miao/docs/screenshot.png`（同一张）
+- 官网使用：`public/assets/screenshot.webp`(1440×1400,已打码,WebP 85)
+- 官网 OG 卡片：`public/assets/og.png`(1200×630,PNG——部分抓取器不认 WebP,OG 图保持 PNG)
+- 主仓库使用：`miao/docs/screenshot.png`（同一张图的 PNG 版）
