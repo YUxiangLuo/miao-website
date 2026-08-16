@@ -36,7 +36,7 @@ const rulesExample = `custom_rules:
 
 const faqs = [
   { q: '为什么需要 root?', a: 'TUN 透明代理需要创建虚拟网卡并接管整机流量,这是内核级权限。除此之外没有别的依赖——一个文件,sudo 运行即可。' },
-  { q: '支持 OpenWrt 吗?', a: '支持。启动时自动检测并安装依赖;运行时文件全部放在 /tmp,不写路由器 flash,不留残渣。' },
+  { q: '支持 OpenWrt 吗?', a: '支持。启动时自动检测并安装依赖;运行时文件全部放在 /tmp,不写路由器 flash。注意仅支持 x86_64 与 aarch64 架构(x86 软路由、ARM64 盒子),mips 机型不在支持范围。' },
   { q: '配置存在哪里?', a: '不创建任何文件也能用。需要持久化时按此顺序查找:--config 指定路径 → 可执行文件同目录 config.yaml → /etc/miao/config.yaml。面板里的分流/全局模式是会话级状态,重启后总是回到规则分流。' },
   { q: '怎么卸载干净?', a: 'sudo bash remove.sh 会停止并删除 systemd 服务、二进制、/etc/miao 配置目录与 /tmp 运行时文件,并清理残留的 sing-box 进程与 sing-tun 网卡。' },
   { q: '面板有鉴权吗?', a: '没有。面板监听 0.0.0.0:6161,面向可信局域网设计——请勿暴露到公网,或在前面套一层带鉴权的反向代理。' },
@@ -50,10 +50,28 @@ const faqs = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Miao — 开箱即用的透明代理</title>
     <meta name="description" content="Miao 把 sing-box 内核、分流规则与 Web 面板打包成单个可执行文件。下载、sudo 运行、浏览器自动打开,结束。支持 Linux 与 OpenWrt。" />
+    <link rel="canonical" href="https://miao.vesein.dev/" />
     <meta property="og:title" content="Miao — 开箱即用的透明代理" />
     <meta property="og:description" content="内嵌 sing-box 内核、分流规则与 Web 面板的单文件透明代理。Linux · OpenWrt。" />
-    <meta property="og:image" content="/assets/screenshot.png" />
+    <meta property="og:image" content="https://miao.vesein.dev/assets/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://miao.vesein.dev/" />
+    <meta property="og:site_name" content="Miao" />
     <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      name: "Miao",
+      url: "https://miao.vesein.dev/",
+      description: "开箱即用的透明代理:内嵌 sing-box 内核、分流规则与 Web 面板的单文件。",
+      applicationCategory: "UtilitiesApplication",
+      operatingSystem: "Linux, OpenWrt",
+      license: "https://github.com/YUxiangLuo/miao/blob/master/LICENSE",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "CNY" },
+      author: { "@type": "Person", name: "YUxiangLuo", url: "https://github.com/YUxiangLuo" },
+    })} />
     <link rel="icon" href="/assets/icon.svg" type="image/svg+xml" />
   </head>
   <body>
@@ -83,6 +101,8 @@ const faqs = [
         <div class="hero-badges">
           <span class="badge">Linux · OpenWrt</span>
           <span class="badge badge-accent">单文件 · 开箱即用</span>
+          <a href="https://github.com/YUxiangLuo/miao/releases/latest" target="_blank" rel="noopener"><img class="shield" src="https://img.shields.io/github/v/release/YUxiangLuo/miao?style=flat-square" alt="最新版本" loading="lazy" /></a>
+          <a href="https://github.com/YUxiangLuo/miao/blob/master/LICENSE" target="_blank" rel="noopener"><img class="shield" src="https://img.shields.io/github/license/YUxiangLuo/miao?style=flat-square" alt="MIT License" loading="lazy" /></a>
         </div>
         <h1>开箱即用的<em>透明代理</em>。</h1>
         <p class="hero-sub">
@@ -102,6 +122,7 @@ const faqs = [
       </div>
       <div class="hero-shot">
         <img src="/assets/screenshot.png" alt="Miao 控制面板:节点选择、手动节点、订阅管理、自定义规则与活跃链接" loading="eager" />
+        <p class="shot-caption">面板实拍,服务器与订阅信息已打码</p>
       </div>
     </header>
 
@@ -228,7 +249,7 @@ chmod +x miao && sudo ./miao</code></pre>
               <tr>
                 <td>OpenWrt</td>
                 <td>按架构同上</td>
-                <td>自动安装依赖;不写 flash</td>
+                <td>仅 x86_64 / aarch64(软路由、ARM 盒子);自动安装依赖,不写 flash</td>
               </tr>
             </tbody>
           </table>
@@ -274,6 +295,7 @@ chmod +x miao && sudo ./miao</code></pre>
           <a href="https://github.com/YUxiangLuo/miao" target="_blank" rel="noopener">GitHub</a>
           <a href="https://github.com/YUxiangLuo/miao/releases" target="_blank" rel="noopener">Releases</a>
           <a href="https://github.com/YUxiangLuo/miao/issues" target="_blank" rel="noopener">Issues</a>
+          <a href="https://github.com/YUxiangLuo/miao/blob/master/LICENSE" target="_blank" rel="noopener">MIT License</a>
         </div>
       </div>
     </footer>
@@ -436,7 +458,8 @@ chmod +x miao && sudo ./miao</code></pre>
     gap: 48px;
     align-items: center;
   }
-  .hero-badges { display: flex; gap: 8px; margin-bottom: 20px; }
+  .hero-badges { display: flex; gap: 8px; margin-bottom: 20px; align-items: center; flex-wrap: wrap; }
+  .hero-badges .shield { height: 20px; display: block; }
   .badge {
     font-size: 0.75rem;
     color: var(--text-muted);
@@ -495,6 +518,12 @@ chmod +x miao && sudo ./miao</code></pre>
     border: 1px solid var(--border);
     box-shadow: var(--shadow);
     display: block;
+  }
+  .shot-caption {
+    margin: 8px 2px 0;
+    color: #4d5563;
+    font-size: 0.8125rem;
+    text-align: right;
   }
 
   /* ---- Section 通用 ---- */
