@@ -147,10 +147,25 @@ wget https://github.com/YUxiangLuo/miao/releases/latest/download/<span id="asset
 chmod +x miao && sudo ./miao</code></pre>
         </div>
         <ul class="notes">
-          <li>浏览器打开 <code>http://localhost:6161</code>，按引导页添加订阅或节点即可</li>
+          <li>浏览器打开 <code>http://localhost:6161</code>,按引导页添加订阅或节点即可</li>
           <li>需要 root(TUN 透明代理所需)</li>
-          <li>常驻服务：<code>sudo bash install.sh ./miao</code> 安装为开机自启的 systemd 服务，重复运行即升级；卸载 <code>sudo bash remove.sh</code> 清理全部痕迹</li>
+          <li>常驻服务:<code>sudo bash install.sh ./miao</code> 安装为开机自启的 systemd 服务,重复运行即升级;卸载 <code>sudo bash remove.sh</code> 清理全部痕迹</li>
         </ul>
+        <details class="mirror-note">
+          <summary>无法访问 GitHub?用镜像站</summary>
+          <div class="terminal terminal-small">
+            <div class="terminal-bar">
+              <span class="term-dot" /><span class="term-dot" /><span class="term-dot" />
+              <span class="terminal-title">镜像站(无需访问 GitHub)</span>
+            </div>
+            <pre><code># 一键安装为 systemd 服务
+curl -fsSL https://miao.vesein.dev/install.sh | sudo MIAO_BASE_URL=https://miao.vesein.dev/dl bash
+
+# 卸载
+curl -fsSL https://miao.vesein.dev/remove.sh | sudo bash</code></pre>
+          </div>
+          <p class="mirror-tip">镜像每 6 小时与最新 release 同步;二进制校验和见 <a href="/dl/sha256sums.txt">sha256sums.txt</a></p>
+        </details>
       </section>
 
       <section class="section" id="why">
@@ -256,6 +271,7 @@ chmod +x miao && sudo ./miao</code></pre>
         </div>
         <p class="section-sub">
           <a href="https://github.com/YUxiangLuo/miao/releases" target="_blank" rel="noopener">全部版本与更新日志 →</a>
+          <span class="dl-mirror">GitHub 下载慢?镜像站:<code>https://miao.vesein.dev/dl/</code></span>
         </p>
       </section>
 
@@ -618,6 +634,39 @@ chmod +x miao && sudo ./miao</code></pre>
     padding-left: 20px;
   }
   .notes li { margin: 6px 0; }
+
+  .mirror-note {
+    margin-top: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0 16px;
+  }
+  .mirror-note summary {
+    padding: 12px 0;
+    cursor: pointer;
+    color: var(--accent-strong);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    list-style: none;
+  }
+  .mirror-note summary::-webkit-details-marker { display: none; }
+  .mirror-note summary::before {
+    content: "▸";
+    margin-right: 8px;
+  }
+  .mirror-note[open] summary::before { content: "▾"; }
+  .mirror-note .terminal { margin-bottom: 12px; }
+  .mirror-tip {
+    margin: 0 0 12px;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+  .dl-mirror {
+    margin-left: 12px;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
 
   /* ---- 痛点对比 ---- */
   .compare {
