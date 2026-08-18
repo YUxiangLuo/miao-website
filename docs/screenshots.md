@@ -1,6 +1,6 @@
 # 面板截图获取方式
 
-官网用到的面板截图（`public/assets/screenshot.png`）不是手摆的，是从真实运行的面板截取的。本文档记录完整流程，更新截图时照做即可。
+官网用到的面板截图（`public/assets/panel.webp`）不是手摆的，是从真实运行的面板截取的。本文档记录完整流程，更新截图时照做即可。
 
 ## 前置条件
 
@@ -41,8 +41,8 @@ sleep 5                                                     # 等节点/规则/�
   // 注意:节点名里的 IP 是横杠编码(vps-5-78-217-242),正则要同时吃横杠和点
   const ipish = (t) => /\d{1,3}[-.]\d{1,3}[-.]\d{1,3}[-.]\d{1,3}/.test(t)
 
-  // 当前节点横幅的 server:port
-  document.querySelectorAll('.current-node-banner .banner-meta').forEach(blur)
+  // 当前节点横幅/顶栏 chip 的 server:port（横幅已迁移为顶栏 chip，旧选择器保留兜底）
+  document.querySelectorAll('.current-node-banner .banner-meta, .topbar .chip .chip-meta, [class*="current-node"] .banner-meta').forEach(blur)
 
   const cards = [...document.querySelectorAll('.panel-card')]
   const byTitle = (t) => cards.find(c => c.querySelector('.section-title-wrap')?.textContent.includes(t))
@@ -73,8 +73,8 @@ sleep 5                                                     # 等节点/规则/�
 ```bash
 agent-browser screenshot /tmp/miao-panel.png
 # 官网使用 WebP(体积约为 PNG 的 1/3):
-magick /tmp/miao-panel.png -quality 85 public/assets/screenshot.webp
-# 主仓库 README 继续用 PNG(GitHub 兼容性最稳):cp 到 miao/docs/screenshot.png
+magick /tmp/miao-panel.png -quality 85 public/assets/panel.webp
+# 主仓库 README 直接引用官网 URL(https://miao.vesein.dev/assets/panel.webp),不再单独存档
 ```
 
 ## 注意事项（都踩过）
@@ -87,6 +87,6 @@ magick /tmp/miao-panel.png -quality 85 public/assets/screenshot.webp
 
 ## 当前官网截图的存档
 
-- 官网使用：`public/assets/screenshot.webp`(1440×1400,已打码,WebP 85)
-- 官网 OG 卡片：`public/assets/og.png`(1200×630,PNG——部分抓取器不认 WebP,OG 图保持 PNG)
-- 主仓库使用：`miao/docs/screenshot.png`（同一张图的 PNG 版）
+- 官网使用：`public/assets/panel.webp`（1440×1400，已打码，WebP 85）
+- 官网 OG 卡片：`public/assets/og.png`（1200×630，PNG——部分抓取器不认 WebP，OG 图保持 PNG；由首页 hero 截图裁切生成）
+- 主仓库使用：README 直接引用 `https://miao.vesein.dev/assets/panel.webp`，仓库内不再存档截图
