@@ -279,9 +279,6 @@ chmod +x miao && sudo ./miao">
 
     <p class="meta-row">
       <span>v0.37.0 · MIT · amd64 / arm64</span>
-      <a href="https://github.com/YUxiangLuo/miao">GitHub</a>
-      <a href="https://github.com/YUxiangLuo/miao/releases/latest">Releases</a>
-      <a href="https://miao.vesein.dev/dl/">镜像站</a>
     </p>
   </div>
 
@@ -314,13 +311,11 @@ chmod +x miao && sudo ./miao">
   <section id="features">
     <h2 class="rule"><b>03</b> 特性</h2>
     <dl>
-      <div><dt>单文件交付</dt><dd>内核、geo 规则集、面板编进一个可执行文件；运行时文件在 <code>/tmp</code>（Windows 为 <code>%TEMP%</code>），系统重启不留残渣</dd></div>
       <div><dt>TUN 透明代理</dt><dd>接管整机流量；防火墙规则自动写、自动收，全程不碰 iptables</dd></div>
       <div><dt>分流 ⇄ 全局</dt><dd>国内直连 / 国外代理，顶栏一键切换；自定义规则永远优先于内置分流</dd></div>
       <div><dt>DNS 双轨</dt><dd>国外域名经代理走 Cloudflare DoH，国内直连 <code>223.5.5.5</code>；缓存先应答、后刷新</dd></div>
-      <div><dt>进程级分流</dt><dd>按进程名 / 路径指定出口：直连 / 代理 / 拦截 / 指定节点</dd></div>
       <div><dt>节点来源</dt><dd>Clash YAML 订阅；<code>hy2 ss vmess vless trojan tuic anytls</code> 分享链接批量导入；VPS 一键部署 Hysteria2（钉版 + SHA256 校验）</dd></div>
-      <div><dt>面板全管理</dt><dd>测速、连接统计、订阅刷新、一键自升级（Linux）；MCP 端点把同一套操作暴露给 AI agent</dd></div>
+      <div><dt>面板全管理</dt><dd>测速、连接统计、订阅刷新、一键自升级（Linux）——从装到卸，浏览器里全办完</dd></div>
     </dl>
   </section>
 
@@ -339,7 +334,7 @@ chmod +x miao && sudo ./miao">
     </div>
     <ul class="facts">
       <li>Linux：<code>auto_route</code> + <code>auto_redirect</code>（nftables）；Windows：<code>auto_route</code> + <code>strict_route</code>（Wintun 已编进内核）</li>
-      <li>面板与内核之间只走 Clash API（<code>127.0.0.1:6262</code>）；配置变更先 <code>sing-box check</code> 校验再热重启，失败自动回滚</li>
+      <li>面板与内核之间只走 Clash API（<code>127.0.0.1:6262</code>）</li>
       <li>内核异常退出自动拉起（退避重试）；上次成功配置缓存直接起内核，订阅后台刷新——启动秒开</li>
     </ul>
   </section>
@@ -363,7 +358,6 @@ chmod +x miao && sudo ./miao">
     <ul class="facts">
       <li>匹配维度：域名 / IP / 端口 / 进程名 / 进程路径 → 动作：直连 / 代理 / 拦截 / 指定节点</li>
       <li>节点失效（订阅刷新改名）自动跳过并在面板标记，节点恢复后自动生效</li>
-      <li>自定义规则优先于内置分流，全局模式下仍生效</li>
     </ul>
   </section>
 
@@ -397,8 +391,8 @@ POST http://&lt;面板地址&gt;/mcp
     <table>
       <thead><tr><th>平台</th><th>文件</th><th>备注</th></tr></thead>
       <tbody>
-        <tr><td>Linux amd64</td><td class="m"><a href="https://github.com/YUxiangLuo/miao/releases/latest/download/miao-rust-linux-amd64">miao-rust-linux-amd64</a></td><td>桌面 / 服务器，musl 单二进制</td></tr>
-        <tr><td>Linux arm64</td><td class="m"><a href="https://github.com/YUxiangLuo/miao/releases/latest/download/miao-rust-linux-arm64">miao-rust-linux-arm64</a></td><td>树莓派 / ARM 盒子 / OpenWrt（x86_64 与 aarch64）</td></tr>
+        <tr><td>Linux amd64</td><td class="m"><a href="https://github.com/YUxiangLuo/miao/releases/latest/download/miao-rust-linux-amd64">miao-rust-linux-amd64</a></td><td>桌面 / 服务器，musl 单二进制 · <a href="https://miao.vesein.dev/dl/miao-rust-linux-amd64">镜像</a></td></tr>
+        <tr><td>Linux arm64</td><td class="m"><a href="https://github.com/YUxiangLuo/miao/releases/latest/download/miao-rust-linux-arm64">miao-rust-linux-arm64</a></td><td>树莓派 / ARM 盒子 / OpenWrt（x86_64 与 aarch64） · <a href="https://miao.vesein.dev/dl/miao-rust-linux-arm64">镜像</a></td></tr>
         <tr><td>Windows amd64</td><td class="m"><a href="https://github.com/YUxiangLuo/miao/releases/latest/download/miao-windows-amd64-setup.exe">miao-windows-amd64-setup.exe</a></td><td>NSIS 安装包，需 WebView2；Win10/11 x64 · <a href="https://miao.vesein.dev/dl/miao-windows-amd64-setup.exe">镜像</a></td></tr>
       </tbody>
     </table>
@@ -412,7 +406,10 @@ POST http://&lt;面板地址&gt;/mcp
 <span class="cmt"># 安装前先核对校验和：https://miao.vesein.dev/dl/sha256sums.txt</span>
 <span class="cmt"># 卸载：curl -fsSL https://miao.vesein.dev/remove.sh | sudo bash</span></pre>
     </div>
-    <p class="meta-row"><a href="https://github.com/YUxiangLuo/miao/releases">全部版本与更新日志 → Releases</a></p>
+    <p class="meta-row">
+      <a href="https://github.com/YUxiangLuo/miao/releases">全部版本与更新日志 → Releases</a>
+      <a href="https://miao.vesein.dev/dl/">镜像站文件清单 → /dl/</a>
+    </p>
   </section>
 
   <!-- 08 FAQ -->
