@@ -1,0 +1,2 @@
+# 每 6 小时同步 Miao 最新 release 到镜像站
+17 */6 * * * root /usr/local/sbin/miao-mirror-sync.sh >> /var/log/miao-mirror.log 2>&1

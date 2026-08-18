@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="robots" content="noindex">
+<title>镜像站 — Miao</title>
+<link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0d10;--pane:#0e1116;--line:#1c222b;
+  --ink:#e8edf2;--body:#9aa7b4;--dim:#5b6672;--accent:#8fb8e8;--ok:#4a9e75;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--body);font:15px/1.75 var(--sans);-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent);color:var(--bg)}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:0 24px}
+header{border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;gap:10px;height:52px}
+.brand{font:700 15px var(--mono);color:var(--ink)}
+.brand .v{font:400 12px var(--mono);color:var(--dim);margin-left:8px}
+.back{margin-left:auto;font:12.5px var(--mono);color:var(--dim)}
+.back:hover{color:var(--ink);text-decoration:none}
+main{padding:64px 0}
+h1{font:700 28px/1.3 var(--sans);color:var(--ink);margin-bottom:10px}
+.sub{margin-bottom:36px}
+.sub code{font:12.5px var(--mono);color:var(--ok);background:var(--pane);border:1px solid var(--line);padding:0 5px;border-radius:2px}
+.pane{background:var(--pane);border:1px solid var(--line);border-radius:2px;margin-bottom:36px}
+.pane-head{display:flex;align-items:center;padding:7px 12px;border-bottom:1px solid var(--line);font:12px var(--mono);color:var(--dim)}
+.pane pre{padding:16px;overflow-x:auto;font:13px/1.9 var(--mono);color:var(--body)}
+.l{white-space:pre}
+.l.cmd{color:var(--ink)}
+.l.cmd::before{content:"$ ";color:var(--dim)}
+.cmt{color:var(--dim)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:28px}
+th{font:500 12px var(--mono);color:var(--dim);text-align:left;padding:8px 12px 8px 2px;border-bottom:1px solid var(--line)}
+td{padding:11px 12px 11px 2px;border-bottom:1px solid var(--line);vertical-align:top}
+td a{font-family:var(--mono);font-size:12.5px}
+.note{font-size:13.5px;color:var(--dim)}
+.note a{color:var(--dim);text-decoration:underline}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <span class="brand">miao<span class="v">镜像站</span></span>
+    <a class="back" href="/">← miao.vesein.dev</a>
+  </div>
+</header>
+<main>
+  <div class="wrap">
+    <h1>镜像站</h1>
+    <p class="sub">每 6 小时与 GitHub 最新 release 同步，当前镜像版本 <code id="ver">…</code>。安装前请核对 <a href="sha256sums.txt">sha256sums.txt</a>。</p>
+
+    <div class="pane">
+      <div class="pane-head">一键安装 / 卸载（无需访问 GitHub）</div>
+<pre><span class="cmt"># 一键安装为 systemd 服务（按机器架构自动对应 amd64/arm64）</span>
+<div class="l cmd">curl -fsSL https://miao.vesein.dev/install.sh | sudo MIAO_BASE_URL=https://miao.vesein.dev/dl bash</div>
+<span class="cmt"># 卸载并清理全部痕迹</span>
+<div class="l cmd">curl -fsSL https://miao.vesein.dev/remove.sh | sudo bash</div></pre>
+    </div>
+
+    <table>
+      <thead><tr><th>文件</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><a href="miao-rust-linux-amd64">miao-rust-linux-amd64</a></td><td>Linux amd64 单二进制（musl，内核/规则集/面板全内嵌）</td></tr>
+        <tr><td><a href="miao-rust-linux-arm64">miao-rust-linux-arm64</a></td><td>Linux arm64 单二进制（树莓派 / ARM 盒子 / OpenWrt）</td></tr>
+        <tr><td><a href="install.sh">install.sh</a></td><td>安装脚本：二进制 → /usr/local/bin，配置 → /etc/miao，注册 systemd</td></tr>
+        <tr><td><a href="remove.sh">remove.sh</a></td><td>卸载脚本：服务、二进制、配置、运行时文件全部清理</td></tr>
+        <tr><td><a href="sha256sums.txt">sha256sums.txt</a></td><td>二进制 SHA256 校验和，随每次同步重新生成</td></tr>
+        <tr><td><a href="VERSION">VERSION</a></td><td>当前镜像对应的 release tag</td></tr>
+      </tbody>
+    </table>
+
+    <p class="note">Windows 桌面版（miao-windows-amd64-setup.exe）不在镜像内，请前往 <a href="https://github.com/YUxiangLuo/miao/releases/latest">GitHub Releases</a>。</p>
+  </div>
+</main>
+<script>
+fetch("VERSION").then(function(r){return r.text()}).then(function(t){
+  document.getElementById("ver").textContent = t.trim();
+}).catch(function(){});
+</script>
+</body>
+</html>
