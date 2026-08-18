@@ -5,13 +5,15 @@ set -euo pipefail
 
 DL=/var/www/miao/dl
 REPO=YUxiangLuo/miao
+WIN_EXE=miao-windows-amd64-setup.exe
 
 mkdir -p "$DL"
 
 latest=$(curl -fsSL "https://api.github.com/repos/$REPO/releases/latest" | grep -oP '"tag_name"\s*:\s*"\K[^"]+')
 current=$(cat "$DL/VERSION" 2>/dev/null || echo none)
 
-if [[ "$latest" != "$current" ]]; then
+# exe 缺失时也全量同步(兼容脚本升级前的旧镜像)
+if [[ "$latest" != "$current" || ! -f "$DL/$WIN_EXE" ]]; then
   echo "new release: $latest (current: $current)"
   for arch in amd64 arm64; do
     f="miao-rust-linux-$arch"
@@ -25,7 +27,16 @@ if [[ "$latest" != "$current" ]]; then
     chmod 755 "$DL/$f.tmp"
     mv "$DL/$f.tmp" "$DL/$f"
   done
-  (cd "$DL" && sha256sum miao-rust-linux-* > sha256sums.txt)
+  # Windows 安装包:PE(MZ)魔数校验,逻辑同上
+  curl -fsSL --retry 3 "https://github.com/$REPO/releases/latest/download/$WIN_EXE" -o "$DL/$WIN_EXE.tmp"
+  if [[ "$(head -c 2 "$DL/$WIN_EXE.tmp")" != "MZ" ]]; then
+    echo "$WIN_EXE 不是有效 PE,中止(保留旧版本)" >&2
+    rm -f "$DL/$WIN_EXE.tmp"
+    exit 1
+  fi
+  chmod 644 "$DL/$WIN_EXE.tmp"
+  mv "$DL/$WIN_EXE.tmp" "$DL/$WIN_EXE"
+  (cd "$DL" && sha256sum miao-rust-linux-* "$WIN_EXE" > sha256sums.txt)
   echo "$latest" > "$DL/VERSION"
   echo "updated to $latest"
 else

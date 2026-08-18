@@ -5,7 +5,7 @@
 
 | 本目录 | 服务器位置 | 作用 |
 | --- | --- | --- |
-| `miao-mirror-sync.sh` | `/usr/local/sbin/miao-mirror-sync.sh` | 从 GitHub 拉最新 release 两个 Linux 二进制（ELF 校验 + 原子替换），重生成 `sha256sums.txt` 与 `VERSION`；`install.sh`/`remove.sh` 每次跟随 master 刷新 |
+| `miao-mirror-sync.sh` | `/usr/local/sbin/miao-mirror-sync.sh` | 从 GitHub 拉最新 release：两个 Linux 二进制（ELF 校验）+ Windows 安装包（MZ/PE 校验），均原子替换；重生成 `sha256sums.txt` 与 `VERSION`；`install.sh`/`remove.sh` 每次跟随 master 刷新 |
 | `miao-mirror` | `/etc/cron.d/miao-mirror` | 每 6 小时调用同步脚本，日志 `/var/log/miao-mirror.log` |
 | `dl-index.html` | `/var/www/miao/dl/index.html` | `/dl/` 目录索引页（Caddy `file_server` 无目录浏览，无此文件则 `/dl/` 404） |
 
