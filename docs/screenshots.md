@@ -20,7 +20,7 @@ agent-browser set viewport 1440 1400
 
 ```js
 // agent-browser eval,返回右列内容高度,按需调整视口
-// 所需视口高度 ≈ 60(顶栏) + 48(页面上下 padding) + 102(状态卡) + 右列内容高度 + 16 + 240(活跃链接区)
+// 所需视口高度 ≈ 96(页面上下留白) + 76(融合顶栏) + 16 + 右列内容高度 + 16 + 184(活跃链接条带)
 document.querySelector('.right-column').scrollHeight
 ```
 
