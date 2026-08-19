@@ -47,11 +47,12 @@ sleep 5                                                     # 等节点/规则/�
   const cards = [...document.querySelectorAll('.panel-card')]
   const byTitle = (t) => cards.find(c => c.querySelector('.section-title-wrap')?.textContent.includes(t))
 
-  // 手动节点卡:meta(IP:端口 · 协议)全码;标题含 IP 的也码
+  // 手动节点卡:行为「名称 .rule-value + 协议 .badge」,名字含 IP 的码名称
+  // (v0.39 起不再有 server:port 的 meta 行;.list-row-meta 分支保留兑底)
   byTitle('手动节点')?.querySelectorAll('.list-row').forEach(row => {
     row.querySelectorAll('.list-row-meta').forEach(blur)
-    const title = row.querySelector('.list-row-title')
-    if (title && ipish(title.textContent)) blur(title)
+    const name = row.querySelector('.rule-value') || row.querySelector('.list-row-title')
+    if (name && ipish(name.textContent)) blur(name)
   })
 
   // 订阅管理卡:链接(即使 UI 截断显示,域名和 token 后缀仍可见)
